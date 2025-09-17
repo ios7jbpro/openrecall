@@ -26,6 +26,7 @@ def create_db() -> None:
                        title TEXT,
                        text TEXT,
                        timestamp INTEGER UNIQUE,
+                       filename TEXT NOT NULL,
                        embedding BLOB
                    )"""
             )
@@ -51,7 +52,7 @@ def get_all_entries() -> List[Entry]:
         with sqlite3.connect(db_path) as conn:
             conn.row_factory = sqlite3.Row  # Return rows as dictionary-like objects
             cursor = conn.cursor()
-            cursor.execute("SELECT id, app, title, text, timestamp, embedding FROM entries ORDER BY timestamp DESC")
+            cursor.execute("SELECT id, app, title, text, timestamp, filename, embedding FROM entries ORDER BY timestamp DESC")
             results = cursor.fetchall()
             for row in results:
                 # Deserialize the embedding blob back into a NumPy array
@@ -93,7 +94,7 @@ def get_timestamps() -> List[int]:
 
 
 def insert_entry(
-    text: str, timestamp: int, embedding: np.ndarray, app: str, title: str
+    text: str, timestamp: int, embedding: np.ndarray, app: str, title: str, filename: str
 ) -> Optional[int]:
     """
     Inserts a new entry into the database.
@@ -115,10 +116,10 @@ def insert_entry(
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
-                """INSERT INTO entries (text, timestamp, embedding, app, title)
-                   VALUES (?, ?, ?, ?, ?)
+                """INSERT INTO entries (text, timestamp, embedding, app, title, filename)
+                   VALUES (?, ?, ?, ?, ?, ?)
                    ON CONFLICT(timestamp) DO NOTHING""", # Avoid duplicates based on timestamp
-                (text, timestamp, embedding_bytes, app, title),
+                (text, timestamp, embedding_bytes, app, title, filename),
             )
             conn.commit()
             if cursor.rowcount > 0: # Check if insert actually happened
