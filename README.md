@@ -14,6 +14,8 @@ Join our [Discord](https://discord.gg/RzvCYRgUkx) and/or [Telegram](https://t.me
 
 devs are too lazy to fix the torchvision problem which stops the program from installing to begin with, this readme is edited to redirect everything to this repo, just follow the instructions like the main repo
 
+edit: multimonitor support is broken as well alongside saving files. jesus who wrote this
+
 # Take Control of Your Digital Memory
 
 OpenRecall is a fully open-source, privacy-first alternative to proprietary solutions like Microsoft's Windows Recall or Limitless' Rewind.ai. With OpenRecall, you can easily access your digital history, enhancing your memory and productivity without compromising your privacy.
